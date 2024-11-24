@@ -1,3 +1,3 @@
-pip install flask
+pip install python
 pip install flask flask-cors requests
-pip install flask nyckel 
+pip install nyckel 
