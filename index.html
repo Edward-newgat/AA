@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyckel Image Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nyckel Recycling Identifier</h1>
+        <input id="imageUrl" type="text" placeholder="Enter Image URL" />
+        <button onclick="invokeApi()">Submit</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function invokeApi() {
+            const imageUrl = document.getElementById("imageUrl").value;
+            if (!imageUrl) {
+                alert("Please enter a valid image URL!");
+                return;
+            }
+
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "Processing...";
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/invoke', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image_url: imageUrl }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    resultDiv.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
